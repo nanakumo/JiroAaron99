@@ -12,7 +12,10 @@ const posts = defineCollection({
     author: z.string(),
     readTime: z.string().default('5 Min Read'),
     date: z.coerce.date(),
-    cover: z.string().url(),
+    cover: z.string().refine(
+      (value) => /^https?:\/\//.test(value) || /^\/(?!\/)/.test(value),
+      'Cover must be an HTTP(S) URL or a local path starting with /',
+    ),
     featured: z.boolean().default(false),
     pageNumber: z.string().optional(),
     tags: z.array(z.string()).default([]),
